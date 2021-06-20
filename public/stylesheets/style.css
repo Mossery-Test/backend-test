@@ -1,0 +1,16 @@
+.img-logo {
+  height: 48px;
+  width: 48px;
+}
+
+.btn-custom {
+  background: #fff;
+  border-color: black;
+  color: black;
+}
+
+.custom-div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
