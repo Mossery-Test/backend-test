@@ -16,6 +16,7 @@
           <h1 class="h3 mb-4 text-gray-800">Collection</h1>
 
           <!-- Button trigger modal -->
+          <% if (collection.length > 0) { %>
           <button
             type="button"
             class="btn btn-primary"
@@ -24,6 +25,7 @@
           >
             <i class="fas fa-plus"></i> Create Collection
           </button>
+          <% } %>
         </div>
         <% if (collection.length > 0 ) { %> <%- include('table_collection') %>
         <% }else{ %> <%- include('empty_collection') %> <% } %>
@@ -44,13 +46,40 @@
 </a>
 
 <script>
+  function displayVal() {
+    let name = $("#collectionName").val();
+
+    $(".name").val(name);
+  }
+
+  $("#nameModal").on("click", ".btn-name", function () {
+    $("#modalCollection").modal("toggle");
+    $("#addModal").modal("show");
+    displayVal();
+  });
+
+  $("input:checkbox[name=book]:checked").each(function () {
+    let array = [];
+
+    array.push($(this).val());
+    $(".book").val(array);
+  });
+
+  // Edit Modal
   $("#dataTable").on("click", ".button-update", function () {
     let id = $(this).data("id");
     let name = $(this).data("name");
+    console.log(name);
 
     $("#editModal").modal("show");
     $(".id").val(id);
-    $(".name").val(name);
+    $("#name").val(name);
+  });
+
+  $("#editModal").on("click", ".btn-name", function () {
+    $("#editModal").modal("toggle");
+    $("#editAddModal").modal("show");
+    displayVal();
   });
 
   function myFunction() {

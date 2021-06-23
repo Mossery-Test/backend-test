@@ -3,7 +3,11 @@ const { ObjectId } = mongoose.Schema;
 
 const collectionSchema = new mongoose.Schema({
   name: {
-    type: Date,
+    type: String,
+    required: true,
+  },
+  lastUpdate: {
+    type: String,
     required: true,
   },
   itemId: [
@@ -12,11 +16,6 @@ const collectionSchema = new mongoose.Schema({
       ref: "Item",
     },
   ],
-  lastUpdate: {
-    type: String,
-    required: true,
-    set: (date) => formatDate(date),
-  },
 });
 
 module.exports = mongoose.model("Collection", collectionSchema);

@@ -27,9 +27,9 @@
                 <a
                   href="javascript:void()"
                   type="button"
-                  class="btn btn-sm btn-custom"
-                  data-id="data-id"
-                  data-name="data-name"
+                  class="btn btn-sm btn-custom button-update"
+                  data-id="<%= collection[i].id %>"
+                  data-name="<%= collection[i].name %>"
                 >
                   Edit
                 </a>
@@ -47,4 +47,5 @@
 </div>
 
 <%- include('modal_collection') %> <%- include('../../partials/js') %> <%-
-include('edit_modal_collection') %>
+include('add_modal_collection') %> <%- include('edit_modal_collection') %> <%-
+include('edit_add_modal_collection') %>

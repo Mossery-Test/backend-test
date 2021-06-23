@@ -81,15 +81,44 @@ module.exports = {
     }
   },
 
-  addCollection: async (req, res) => {
+  _addCollection: async (req, res) => {
     try {
-      const { name } = req.body;
+      const { name, book } = req.body;
+      const date_ob = new Date();
+      const year = date_ob.getFullYear();
+      const date = date_ob.getDate();
+      const month = date_ob.getMonth();
+      const format = `${date}-${month}-${year}`;
+
+      const newCollection = {
+        name,
+        lastUpdate: format,
+      };
+
+      const collection = await Collection.create(newCollection);
+      if (Array.isArray(book)) {
+        for (let i = 0; i < book.length; i++) {
+          collection.itemId.push({ _id: book[i] });
+        }
+      } else {
+        collection.itemId.push({ _id: book });
+      }
+      await collection.save();
+
+      req.flash("alertMessage", "Collection Successfully Added");
+      req.flash("alertStatus", "success");
+      res.redirect("/admin/collection");
     } catch (error) {
       req.flash("alertMessage", `${error}`);
       req.flash("alertStatus", "danger");
       res.redirect("/admin/collection");
-      console.log("Gagal");
     }
+  },
+  get addCollection() {
+    return this._addCollection;
+  },
+  set addCollection(value) {
+    this._addCollection = value;
   },
 
   deleteCollection: async (req, res) => {
