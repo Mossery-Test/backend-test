@@ -1,9 +1,10 @@
-var express = require('express');
-var router = express.Router();
+const adminControllers = require("../Controllers/adminController");
+const auth = require("../middlewares/auth");
+
+const express = require("express");
+const router = express.Router();
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
-
+router.get("/", adminControllers.viewSignin);
+router.post("/signin", adminControllers.actionSignin);
 module.exports = router;
