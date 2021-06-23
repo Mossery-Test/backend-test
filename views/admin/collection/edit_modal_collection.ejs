@@ -9,7 +9,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="editModal">Add New Category</h5>
+        <h5 class="modal-title" id="editModal">Select Products</h5>
         <button
           type="button"
           class="close"
@@ -21,15 +21,50 @@
       </div>
       <form action="/admin/category" method="POST">
         <div class="modal-body">
-          <div class="form-group">
-            <label for="exampleFormControlInput1">Category Name</label>
-            <input
-              type="text"
-              name="name"
-              class="form-control"
-              placeholder="New Category"
-            />
-          </div>
+          <table class="table" id="dataTable" cellspacing="0">
+            <thead>
+              <tr>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col">Products</th>
+                <th scope="col">Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for( let i = 0; i < item.length; i++ ) { %>
+              <tr>
+                <td>
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    id="<%= item[i]._id %>"
+                  />
+                </td>
+                <td>
+                  <% if (item[i].imageUrl == null) { %>
+                  <embed
+                    src="/images/book-solid.svg"
+                    width="16px"
+                    height="16px"
+                  />
+                  <% }else{ %>
+                  <img src="<%= item[i].imageUrl %>" />
+                  <% } %>
+                </td>
+                <td>
+                  <label class="form-check-label" for="<%= item[i]._id %>"
+                    ><%= item[i].title %></label
+                  >
+                </td>
+                <td>
+                  <label class="form-check-label" for="<%= item[i]._id %>"
+                    >$<%= item[i].price %></label
+                  >
+                </td>
+              </tr>
+              <% } %>
+            </tbody>
+          </table>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">

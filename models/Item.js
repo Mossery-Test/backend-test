@@ -14,7 +14,7 @@ function formatDate(date) {
 }
 
 const itemSchema = new mongoose.Schema({
-  item: {
+  title: {
     type: String,
     required: true,
   },
@@ -24,12 +24,10 @@ const itemSchema = new mongoose.Schema({
   },
   imageUrl: {
     type: String,
-    required: true,
   },
   releaseDate: {
-    type: String,
+    type: Date,
     required: true,
-    set: (date) => formatDate(date),
   },
   description: {
     type: String,

@@ -1,4 +1,6 @@
 const User = require("../models/User");
+const Collection = require("../models/Collection");
+const Item = require("../models/Item");
 
 const bcrypt = require("bcrypt");
 
@@ -56,18 +58,52 @@ module.exports = {
   },
   // ANCHOR: End Handle Login
 
-  // ANCHOR: Start Handle Register
-  // ANCHOR: End Handle Register
-
   // ANCHOR: Start Handle Collection
-  viewCollection: (req, res) => {
+  viewCollection: async (req, res) => {
     try {
+      const alertMessage = req.flash("alertMessage");
+      const alertStatus = req.flash("alertStatus");
+      const alert = { message: alertMessage, status: alertStatus };
+
+      const user = await User.find();
+      const collection = await Collection.find();
+      const item = await Item.find();
+
       res.render("admin/collection/view_collection", {
         title: "Mossery | Collection",
         status: "collection",
+        collection,
+        item,
+        alert,
       });
     } catch (error) {
       console.log(error);
+    }
+  },
+
+  addCollection: async (req, res) => {
+    try {
+      const { name } = req.body;
+    } catch (error) {
+      req.flash("alertMessage", `${error}`);
+      req.flash("alertStatus", "danger");
+      res.redirect("/admin/collection");
+      console.log("Gagal");
+    }
+  },
+
+  deleteCollection: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const collection = await Collection.findOne({ _id: id });
+      await collection.remove();
+      req.flash("alertMessage", "Collection Successfully Deleted");
+      req.flash("alertStatus", "success");
+      res.redirect("/admin/collection");
+    } catch (error) {
+      req.flash("alertMessage", `${error}`);
+      req.flash("alertStatus", "danger");
+      res.redirect("/admin/collection");
     }
   },
   // ANCHOR: End Handle Collection

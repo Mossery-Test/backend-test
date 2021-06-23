@@ -10,4 +10,6 @@ router.post("/signin", adminControllers.actionSignin);
 
 // ANCHOR: Collection
 router.get("/collection", adminControllers.viewCollection);
+router.delete("/collection/:id", adminControllers.deleteCollection);
+
 module.exports = router;

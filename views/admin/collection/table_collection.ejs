@@ -8,49 +8,38 @@
             <th scope="col">Collections</th>
             <th scope="col">Products</th>
             <th scope="col">Last Updated</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
           </tr>
         </thead>
         <tbody>
+          <% for( let i = 0; i < collection.length; i++ ) { %>
           <tr>
-            <td>1</td>
-            <td>Year End Sale</td>
-            <td>38 Products</td>
-            <td>Last Update</td>
+            <td><%= i+1 %></td>
+            <td><%= collection[i].name %></td>
+            <td><%= collection[i].itemId.length %> Products</td>
+            <td><%= collection[i].lastUpdate %></td>
             <td>
-              <a
-                href="javascript:void()"
-                type="button"
-                class="btn btn-sm btn-custom"
-                data-id="data-id"
-                data-name="data-name"
+              <form
+                action="/admin/collection/<%= collection[i].id %>?_method=DELETE"
+                method="POST"
               >
-                Edit
-              </a>
-              <button type="submit" class="btn btn-sm btn-custom">
-                Delete
-              </button>
+                <a
+                  href="javascript:void()"
+                  type="button"
+                  class="btn btn-sm btn-custom"
+                  data-id="data-id"
+                  data-name="data-name"
+                >
+                  Edit
+                </a>
+                <button type="submit" class="btn btn-sm btn-custom">
+                  Delete
+                </button>
+              </form>
             </td>
           </tr>
-          <tr>
-            <td>1</td>
-            <td>Year End Sale</td>
-            <td>38 Products</td>
-            <td>Last Update</td>
-            <td>
-              <a
-                href="javascript:void()"
-                type="button"
-                class="btn btn-sm btn-custom"
-                data-id="data-id"
-                data-name="data-name"
-              >
-                Edit
-              </a>
-              <button type="submit" class="btn btn-sm btn-custom">
-                Delete
-              </button>
-            </td>
-          </tr>
+          <% } %>
         </tbody>
       </table>
     </div>
