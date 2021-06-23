@@ -81,7 +81,7 @@ module.exports = {
     }
   },
 
-  _addCollection: async (req, res) => {
+  addCollection: async (req, res) => {
     try {
       const { name, book } = req.body;
       const date_ob = new Date();
@@ -114,11 +114,33 @@ module.exports = {
       res.redirect("/admin/collection");
     }
   },
-  get addCollection() {
-    return this._addCollection;
-  },
-  set addCollection(value) {
-    this._addCollection = value;
+
+  editCollection: async (req, res) => {
+    try {
+      const { id, name, editBooks } = req.body;
+      const collection = await Collection.findOne({ _id: id });
+      const totalBooks = collection.itemId;
+      totalBooks.splice(0, totalBooks.length);
+
+      if (Array.isArray(editBooks)) {
+        for (let i = 0; i < editBooks.length; i++) {
+          collection.itemId.push({ _id: editBooks[i] });
+        }
+      } else {
+        collection.itemId.push({ _id: editBooks });
+      }
+
+      collection.name = name;
+      await collection.save();
+
+      req.flash("alertMessage", "Collection Successfully Edited");
+      req.flash("alertStatus", "success");
+      res.redirect("/admin/collection");
+    } catch (error) {
+      req.flash("alertMessage", `${error}`);
+      req.flash("alertStatus", "danger");
+      res.redirect("/admin/collection");
+    }
   },
 
   deleteCollection: async (req, res) => {

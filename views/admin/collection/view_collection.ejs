@@ -69,17 +69,41 @@
   $("#dataTable").on("click", ".button-update", function () {
     let id = $(this).data("id");
     let name = $(this).data("name");
-    console.log(name);
+    let book = $(this).data("books");
 
     $("#editModal").modal("show");
     $(".id").val(id);
     $("#name").val(name);
+    $(".bookList").val(book);
+  });
+
+  function displayEdit() {
+    let name = $("#name").val();
+    let book = $(".bookList").val();
+    let splitBook = book.split(",");
+
+    for (let i = 0; i < splitBook.length; i++) {
+      $("input[value='" + splitBook[i] + "']").prop("checked", true);
+    }
+    console.log($(".name").val(name));
+  }
+
+  $("#editAddModal").on("hidden.bs.modal", function (e) {
+    $("input:checkbox[name=editBooks]").prop("checked", false);
+  });
+
+  $("input:checkbox[name=editBooks]:checked").each(function () {
+    let array = [];
+
+    array.push($(this).val());
+    $(".editBooks").val(array);
   });
 
   $("#editModal").on("click", ".btn-name", function () {
     $("#editModal").modal("toggle");
     $("#editAddModal").modal("show");
-    displayVal();
+
+    displayEdit();
   });
 
   function myFunction() {

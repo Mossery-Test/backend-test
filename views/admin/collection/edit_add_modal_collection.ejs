@@ -19,9 +19,11 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form action="/admin/collection" method="POST">
+      <form action="/admin/collection?_method=PUT" method="POST">
         <div class="modal-body">
           <input type="text" class="name" hidden name="name" />
+          <input type="text" class="id" hidden name="id" />
+
           <table class="table" id="dataTable" cellspacing="0">
             <thead>
               <tr>
@@ -40,7 +42,7 @@
                     class="form-check-input"
                     id="<%= item[i]._id %>"
                     value="<%= item[i]._id %>"
-                    name="book"
+                    name="editBooks"
                   />
                 </td>
                 <td>
