@@ -1,6 +1,6 @@
 const router = require("express").Router();
 
-const adminControllers = require("../Controllers/adminController");
+const adminControllers = require("../controllers/adminController");
 const auth = require("../middlewares/auth");
 const {verifyToken} = require("../middlewares/authJwt")
 
