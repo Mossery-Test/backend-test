@@ -3,9 +3,11 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+var cors = require("cors");
 const methodOverride = require("method-override");
 const session = require("express-session");
 const flash = require("connect-flash");
+const bodyParser = require("body-parser");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
@@ -14,12 +16,15 @@ const apiRouter = require("./routes/api");
 
 // Koneksi Mongoose
 const mongoose = require("mongoose");
-mongoose.connect("mongodb://localhost:27017/db-moserry", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useCreateIndex: true,
-  useFindAndModify: false,
-});
+mongoose.connect(
+  "mongodb://Lukuzushiki:test@cluster0-shard-00-00.epd1c.mongodb.net:27017,cluster0-shard-00-01.epd1c.mongodb.net:27017,cluster0-shard-00-02.epd1c.mongodb.net:27017/db_mossery?ssl=true&replicaSet=atlas-6e5dri-shard-0&authSource=admin&retryWrites=true&w=majority",
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+  }
+);
 
 var app = express();
 
@@ -46,6 +51,7 @@ app.use(
     cookie: { expires: 365 * 24 * 60 * 60 * 1000 },
   })
 );
+app.use(cors());
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);

@@ -3,6 +3,8 @@ const Collection = require("../models/Collection");
 const Item = require("../models/Item");
 
 const bcrypt = require("bcrypt");
+const jwt = require('jsonwebtoken')
+const config = require("../config/auth.config")
 
 module.exports = {
   // ANCHOR: Start Handle Login
@@ -50,6 +52,8 @@ module.exports = {
       };
 
       if (user && isPasswordMatch) {
+        let token = jwt.sign({ id: user._id, username: user.username }, config.secret);
+        res.cookie("token", token)
         res.redirect("/admin/collection");
       }
     } catch (error) {
