@@ -1,10 +1,12 @@
 const User = require("../models/User");
 const Collection = require("../models/Collection");
 const Item = require("../models/Item");
+const AWS = require("../Config/aws-s3-bucket");
 
+const fs = require("fs-extra");
 const bcrypt = require("bcrypt");
-const jwt = require('jsonwebtoken')
-const config = require("../config/auth.config")
+const jwt = require("jsonwebtoken");
+const config = require("../config/auth.config");
 
 module.exports = {
   // ANCHOR: Start Handle Login
@@ -52,8 +54,11 @@ module.exports = {
       };
 
       if (user && isPasswordMatch) {
-        let token = jwt.sign({ id: user._id, username: user.username }, config.secret);
-        res.cookie("token", token)
+        let token = jwt.sign(
+          { id: user._id, username: user.username },
+          config.secret
+        );
+        res.cookie("token", token);
         res.redirect("/admin/collection");
       }
     } catch (error) {
@@ -159,6 +164,184 @@ module.exports = {
       req.flash("alertMessage", `${error}`);
       req.flash("alertStatus", "danger");
       res.redirect("/admin/collection");
+    }
+  },
+  // ANCHOR: End Handle Collection
+
+  // ANCHOR: Start Handle Products
+  viewProduct: async (req, res) => {
+    try {
+      const alertMessage = req.flash("alertMessage");
+      const alertStatus = req.flash("alertStatus");
+      const alert = { message: alertMessage, status: alertStatus };
+
+      const product = await Item.find();
+      const item = await Item.find();
+
+      res.render("admin/product/view_product", {
+        title: "Mossery | Product",
+        status: "products",
+        action: "view",
+        product,
+        item,
+        alert,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  showAdd: async (req, res) => {
+    try {
+      const alertMessage = req.flash("alertMessage");
+      const alertStatus = req.flash("alertStatus");
+      const alert = { message: alertMessage, status: alertStatus };
+
+      const product = await Item.find();
+      const item = await Item.find();
+
+      res.render("admin/product/view_product", {
+        title: "Mossery | Product",
+        status: "products",
+        action: "add",
+        product,
+        item,
+        alert,
+      });
+    } catch (error) {
+      req.flash("alertMessage", `${error.message}`);
+      req.flash("alertStatus", "danger");
+      res.redirect("/admin/products");
+    }
+  },
+
+  addProduct: async (req, res) => {
+    try {
+      const { title, price, releaseDate, description } = req.body;
+
+      if (req.file) {
+        const newItem = {
+          title,
+          price,
+          imageUrl: `Items/${req.file.filename}`,
+          releaseDate,
+          description,
+        };
+
+        let file = req.file;
+
+        const path = file.path;
+        const params = {
+          ACL: "public-read",
+          Bucket: `server-gaming-house`,
+          Body: fs.createReadStream(path),
+          Key: `Items/${file.filename}`,
+        };
+
+        const item = await Item.create(newItem);
+        AWS.uploadItems(params, item);
+
+        await item.save();
+      } else {
+        const newItem = {
+          title,
+          price,
+          imageUrl: "null",
+          releaseDate,
+          description,
+        };
+
+        const item = await Item.create(newItem);
+        await item.save();
+      }
+
+      req.flash("alertMessage", "Collection Successfully Added");
+      req.flash("alertStatus", "success");
+      res.redirect("/admin/products");
+    } catch (error) {
+      req.flash("alertMessage", `${error}`);
+      req.flash("alertStatus", "danger");
+      res.redirect("/admin/products");
+    }
+  },
+
+  showEdit: async (req, res) => {
+    try {
+      const alertMessage = req.flash("alertMessage");
+      const alertStatus = req.flash("alertStatus");
+      const alert = { message: alertMessage, status: alertStatus };
+
+      const { id } = req.params;
+      const product = await Item.findOne({ _id: id });
+
+      res.render("admin/product/view_product", {
+        title: "Mossery | Product",
+        status: "products",
+        action: "edit",
+        product,
+        alert,
+      });
+    } catch (error) {
+      req.flash("alertMessage", `${error.message}`);
+      req.flash("alertStatus", "danger");
+      res.redirect("/admin/products");
+    }
+  },
+
+  editProduct: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { title, price, releaseDate, description } = req.body;
+      const item = await Item.findOne({ _id: id });
+
+      if (req.file) {
+        item.title = title;
+        item.price = price;
+        item.releaseDate = releaseDate;
+        item.description = description;
+
+        let file = req.file;
+
+        const path = file.path;
+        const params = {
+          ACL: "public-read",
+          Bucket: `server-gaming-house`,
+          Body: fs.createReadStream(path),
+          Key: `Items/${file.filename}`,
+        };
+
+        AWS.uploadItems(params, item);
+        item.save();
+      } else {
+        item.title = title;
+        item.price = price;
+        item.releaseDate = releaseDate;
+        item.description = description;
+
+        item.save();
+      }
+      req.flash("alertMessage", "Collection Successfully Added");
+      req.flash("alertStatus", "success");
+      res.redirect("/admin/products");
+    } catch (error) {
+      req.flash("alertMessage", `${error.message}`);
+      req.flash("alertStatus", "danger");
+      res.redirect("/admin/products");
+    }
+  },
+
+  deleteItem: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const item = await Item.findOne({ _id: id });
+      await item.remove();
+      req.flash("alertMessage", "Item Successfully Deleted");
+      req.flash("alertStatus", "success");
+      res.redirect("/admin/products");
+    } catch (error) {
+      req.flash("alertMessage", `${error}`);
+      req.flash("alertStatus", "danger");
+      res.redirect("/admin/products");
     }
   },
   // ANCHOR: End Handle Collection

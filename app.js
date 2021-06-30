@@ -7,7 +7,6 @@ var cors = require("cors");
 const methodOverride = require("method-override");
 const session = require("express-session");
 const flash = require("connect-flash");
-const bodyParser = require("body-parser");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");

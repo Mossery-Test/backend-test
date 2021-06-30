@@ -17,7 +17,7 @@
   <!-- Divider -->
   <hr class="sidebar-divider my-0" />
 
-  <!-- Nav Item - Dashboard -->
+  <!-- Nav Item - Collection -->
   <% if(status == "collection") {%>
   <li class="nav-item active"><% } else {%></li>
   <li class="nav-item">
@@ -25,6 +25,16 @@
     <a class="nav-link" href="/admin/collection">
       <i class="fas fa-book"></i>
       <span>Collection</span></a
+    >
+  </li>
+
+  <% if(status == "products") {%>
+  <li class="nav-item active"><% } else {%></li>
+  <li class="nav-item">
+    <% } %>
+    <a class="nav-link" href="/admin/products">
+      <i class="fas fa-book"></i>
+      <span>Product</span></a
     >
   </li>
 

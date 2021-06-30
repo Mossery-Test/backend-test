@@ -1,0 +1,52 @@
+<div class="card shadow mb-4">
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table" id="dataTable" cellspacing="0">
+        <thead>
+          <tr>
+            <th scope="col">No</th>
+            <th scope="col">Title</th>
+            <th scope="col">Price</th>
+            <th scope="col">Image</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for( let i = 0; i < product.length; i++ ) { %>
+          <tr>
+            <td><%= i+1 %></td>
+            <td><%= product[i].title %></td>
+            <td>$<%= product[i].price %></td>
+            <td>
+              <img
+                src="https://server-gaming-house.s3.amazonaws.com/<%= product[i].imageUrl %>"
+                alt=""
+                height="100"
+                width="200"
+              />
+            </td>
+            <td>
+              <form
+                action="/admin/products/<%= product[i].id %>?_method=DELETE"
+                method="POST"
+              >
+                <a
+                  href="/admin/products/<%= product[i].id %>"
+                  type="button"
+                  class="btn btn-sm btn-custom button-update"
+                >
+                  Edit
+                </a>
+                <button type="submit" class="btn btn-sm btn-custom">
+                  Delete
+                </button>
+              </form>
+            </td>
+          </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
