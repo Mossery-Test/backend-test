@@ -34,4 +34,18 @@ module.exports = {
       });
     }
   },
+
+  allProduct: async (req, res) => {
+    try {
+      const item = await Item.find();
+
+      res.status(200).json({
+        item,
+      });
+    } catch (error) {
+      res.status(500).json({
+        message: "Internal Server Error",
+      });
+    }
+  },
 };
