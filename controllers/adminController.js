@@ -1,7 +1,7 @@
 const User = require("../models/User");
 const Collection = require("../models/Collection");
 const Item = require("../models/Item");
-const AWS = require("../Config/aws-s3-bucket");
+const AWS = require("../config/aws-s3-bucket");
 
 const fs = require("fs-extra");
 const bcrypt = require("bcrypt");
