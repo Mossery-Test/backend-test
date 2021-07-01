@@ -3,7 +3,7 @@ const router = require("express").Router();
 const adminControllers = require("../controllers/adminController");
 const auth = require("../middlewares/auth");
 const { verifyToken } = require("../middlewares/authJwt");
-const { uploadSingle } = require("../Middlewares/multer");
+const { uploadSingle } = require("../middlewares/multer");
 
 // ANCHOR: Login
 router.get("/", adminControllers.viewSignin);
